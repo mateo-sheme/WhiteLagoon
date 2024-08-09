@@ -11,30 +11,37 @@
     <div class="card-body border p-4">
         <form method="post" class="row">
             <div class="p-3">
+                <div asp-validation-summary="ModelOnly"></div> //ky divi ben qe nese ke error messages te model ti afishoje tek view por e nxjerr ne fillim si pyke
                 //asp-for therret model qe kemi krijuar dhe nga ato cfare jane deklarua
                 <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.Name" class="form-control border shadow" />
                     <label asp-for="Name" class="ms-2"></label>
+                    <span asp-validation-for="Name" class="text-danger"></span> //tregon error message te faqja
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.Description" class="form-control border shadow" />
                     <label asp-for="Description" class="ms-2"></label>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.Price" class="form-control border shadow" />
                     <label asp-for="Price" class="ms-2"></label>
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.Sqft" class="form-control border shadow" />
                     <label asp-for="Sqft" class="ms-2"></label>
+                    <span asp-validation-for="Sqft" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.Occupancy" class="form-control border shadow" />
                     <label asp-for="Occupancy" class="ms-2"></label>
+                    <span asp-validation-for="Occupancy" class="text-danger"></span>
                 </div>
                  <div class="form-floating py-2 col-12">
                     <input asp-for="@Model.ImageUrl" class="form-control border shadow" />
                     <label asp-for="ImageUrl" class="ms-2"></label>
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
                 <div class="row pt-2">
                     <button type="submit" class="btn btn-success w-100">
@@ -50,3 +57,9 @@
         </form>
     </div>
 </div>
+
+@section Scripts{ //shton si script javascriptin ate validmin partial qe ben client side validation
+@{
+    <partial name="_ValidationScriptsPartial"/>
+}
+}

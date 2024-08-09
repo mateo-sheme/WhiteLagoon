@@ -25,9 +25,18 @@ namespace WhiteLagoon.Web.Controllers
         [HttpPost]
         public IActionResult Create(Villa obj)
         {
-            _db.Villas.Add(obj); //kjo i thau qe do shtosh kete
-            _db.SaveChanges(); //kjo e ruan te databaza
-            return RedirectToAction("Index", "Villa"); //mbasi e ben te con te index villa
+            if (obj.Name == obj.Description)
+            {
+                ModelState.AddModelError("name", "The description cannot excatly match the name");
+                //ai stringu i pare eshte emri i asp-validation-for nuk eshte case-senesitive dhe nese e vendos do afishoje kete message ne vend te te parit
+                    }
+            if (ModelState.IsValid) //verifikon qe nese ka marre te dhena ose jo ne menyre qe mos te kete problem ne insertim
+            {
+                _db.Villas.Add(obj); //kjo i thau qe do shtosh kete
+                _db.SaveChanges(); //kjo e ruan te databaza
+                return RedirectToAction("Index"); //mbasi e ben te con te index villa
+            }
+            return View();
         }
     }
 }

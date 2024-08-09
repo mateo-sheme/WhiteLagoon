@@ -11,12 +11,14 @@ namespace WhiteLagoon.domain.Entities
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+        [MaxLength(50)] //madhesia e lejuar
         public string? Description {  get; set; }
         public double Price { get; set; }
-        [Display(Name = "Price per night")]
+        [Display(Name = "Price per night")] //display data annotation
+        [Range(10, 10000)] //range nga cila vlere deri te cila e lejon, ajo qe duhej te shpikja nje metode me vete ne javen e mutit qe ta validonte numrin
         public int Sqft { get; set; }
         public int Occupancy { get; set; }
-
+        [Range(1,10)]
         [Display(Name = "Image Url")]
         public string? ImageUrl {  get; set; }
         public DateTime? CreationDate { get; set; }
