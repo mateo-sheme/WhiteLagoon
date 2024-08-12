@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WhiteLagoon.domain.Entities
+namespace WhiteLagoon.Domain.Entities
 {
     public class Villa
     {
@@ -18,7 +18,6 @@ namespace WhiteLagoon.domain.Entities
         [Range(10, 10000)] //range nga cila vlere deri te cila e lejon, ajo qe duhej te shpikja nje metode me vete ne javen e mutit qe ta validonte numrin
         public int Sqft { get; set; }
         public int Occupancy { get; set; }
-        [Range(1,10)]
         [Display(Name = "Image Url")]
         public string? ImageUrl {  get; set; }
         public DateTime? CreationDate { get; set; }

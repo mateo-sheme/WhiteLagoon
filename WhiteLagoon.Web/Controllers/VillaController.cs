@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WhiteLagoon.domain.Entities;
+using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Data;
 
 namespace WhiteLagoon.Web.Controllers
@@ -29,10 +29,65 @@ namespace WhiteLagoon.Web.Controllers
             {
                 ModelState.AddModelError("name", "The description cannot excatly match the name");
                 //ai stringu i pare eshte emri i asp-validation-for nuk eshte case-senesitive dhe nese e vendos do afishoje kete message ne vend te te parit
-                    }
+            }
             if (ModelState.IsValid) //verifikon qe nese ka marre te dhena ose jo ne menyre qe mos te kete problem ne insertim
             {
                 _db.Villas.Add(obj); //kjo i thau qe do shtosh kete
+                _db.SaveChanges(); //kjo e ruan te databaza
+                return RedirectToAction("Index"); //mbasi e ben te con te index villa
+            }
+            return View();
+        }
+        public IActionResult Update(int villaId) /*per te bere update deklaron si metode me nje parameter variabel per villa id
+            pastaj Villa? shikon nese ka row te deklaraur e shenon si obj
+            pastaj therret _db qe eshte controlleri dhe tek tb Villas
+            dhe ben fileter me past me parametrin firstordefault
+            u ku eshte idja e villes dhe e barazon me villa id
+            nese ovj eshte bosh kthen not found ne te kunder therret view to obj
+            */
+        {
+            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);
+
+            /*Villa? obj = _db.Villas.Find(villaId);
+             * var VillaList = _db.Villas.Where(u => u.Price > 50 && u.Occupancy > 0
+             * nje shembul sesi mund te besh retireve data nga db bazuar ne kusht
+              */
+            if (obj == null)
+            {
+                return NotFound();
+            }
+                return View(obj);
+            }
+       
+    [HttpPost]
+    public IActionResult Update(Villa obj)
+    {
+        if (ModelState.IsValid && obj.Id > 0) 
+        {
+            _db.Villas.Update(obj); //kjo i thau qe do shtosh kete
+            _db.SaveChanges(); //kjo e ruan te databaza
+            return RedirectToAction("Index"); //mbasi e ben te con te index villa
+        }
+        return View();
+    }
+
+        public IActionResult Delete(int villaId)
+        {
+            Villa? obj = _db.Villas.FirstOrDefault(u => u.Id == villaId);  
+            if (obj is null)
+            {
+                return NotFound();
+            }
+            return View(obj);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Villa obj)
+        {
+            Villa? objFromDb = _db.Villas.FirstOrDefault(u =>u.Id == obj.Id);
+            if (objFromDb is not null)
+            {
+                _db.Villas.Remove(objFromDb); //kjo i thau qe do shtosh kete
                 _db.SaveChanges(); //kjo e ruan te databaza
                 return RedirectToAction("Index"); //mbasi e ben te con te index villa
             }

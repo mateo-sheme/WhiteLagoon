@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using WhiteLagoon.domain.Entities;
+using WhiteLagoon.Domain.Entities;
 using static System.Net.WebRequestMethods;
 
 namespace WhiteLagoon.Infrastructure.Data
