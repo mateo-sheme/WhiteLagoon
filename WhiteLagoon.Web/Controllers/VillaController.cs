@@ -34,8 +34,10 @@ namespace WhiteLagoon.Web.Controllers
             {
                 _db.Villas.Add(obj); //kjo i thau qe do shtosh kete
                 _db.SaveChanges(); //kjo e ruan te databaza
+                TempData["success"] = "The villa has been created succesfully!";
                 return RedirectToAction("Index"); //mbasi e ben te con te index villa
             }
+            TempData["error"] = "The villa couldn't be created!";
             return View();
         }
         public IActionResult Update(int villaId) /*per te bere update deklaron si metode me nje parameter variabel per villa id
@@ -66,9 +68,11 @@ namespace WhiteLagoon.Web.Controllers
         {
             _db.Villas.Update(obj); //kjo i thau qe do shtosh kete
             _db.SaveChanges(); //kjo e ruan te databaza
+                TempData["success"] = "The villa has been updated succesfully!";
             return RedirectToAction("Index"); //mbasi e ben te con te index villa
         }
-        return View();
+            TempData["error"] = "The villa couldn't be updated!";
+            return View();
     }
 
         public IActionResult Delete(int villaId)
@@ -89,8 +93,10 @@ namespace WhiteLagoon.Web.Controllers
             {
                 _db.Villas.Remove(objFromDb); //kjo i thau qe do shtosh kete
                 _db.SaveChanges(); //kjo e ruan te databaza
+                TempData["success"] = "The villa has been deleted succesfully!";
                 return RedirectToAction("Index"); //mbasi e ben te con te index villa
             }
+            TempData["error"] = "The villa couldn't be deleted!";
             return View();
         }
     }
