@@ -26,7 +26,7 @@ namespace WhiteLagoon.Web.Controllers
         [HttpPost]
         public IActionResult Create(VillaNumber obj)
         {
-         
+            ModelState.Remove("Villa"); //kjo behet sepse kodi vetveiu ben verifkim me villa qe a eshte i duhur ose jo kjo heq ate validation nga villa
             if (ModelState.IsValid) //verifikon qe nese ka marre te dhena ose jo ne menyre qe mos te kete problem ne insertim
             {
                 _db.VillaNumbers.Add(obj); //kjo i thau qe do shtosh kete
