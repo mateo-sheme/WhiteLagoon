@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Data;
 
@@ -20,6 +21,15 @@ namespace WhiteLagoon.Web.Controllers
 
         public IActionResult Create()
         {
+            //ben si liste drop down merr villa nga db villas i konverton si liste ku u eshte text dhe value ca do mbaje eshte Id qe e kthen ne string qe me pas e therret te SelectListItem
+            IEnumerable<SelectListItem> list = _db.Villas.ToList().Select(u=> new SelectListItem 
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+            //view data perdoret per te levizur data nga controlelr tek view, ne rastin tone ne jemi te kontrolleri
+            //dhe duam nje menyre qe te afishojme tek view listen e krijuar
+            ViewData["VillaList"] = list;
             return View();
         }
 

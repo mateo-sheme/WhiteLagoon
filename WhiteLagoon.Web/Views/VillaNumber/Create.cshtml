@@ -15,7 +15,17 @@
                 @*ky divi ben qe nese ke error messages te model ti afishoje tek view por e nxjerr ne fillim si pyke*@
                 @*asp-for therret model qe kemi krijuar dhe nga ato cfare jane deklaruar*@
                 <div class="form-floating py-2 col-12">
-                    <input asp-for="VillaId" class="form-control border shadow" />
+                    @* Select asp-for perdorert per te nxjerre si list dropdown kur krijon villa therret si fillim model villa id
+                        pastaj nga items duke thirruar annotation viewdata listen qe u krijuar tek view si IEnumerable per list
+                        pastaj class qe i jep thjesht nje border shadow
+                        dhe option si te business centrali i shtova nje vete qe eshte disabled e para thjesht select villa si
+                        instruction qe cfare te beje
+                    *@
+
+                    <select asp-for="@Model.VillaId" asp-items="@ViewData["VillaList"] as IEnumerable<SelectListItem>"
+                        class="form-select border shadow">
+                        <option disabled selected>--Select Villa---</option>
+                    </select>
                     <label asp-for="VillaId" class="ms-2"></label>
                     <span asp-validation-for="VillaId" class="text-danger"></span>
                     @*tregon error message te faqja*@
