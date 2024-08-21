@@ -29,7 +29,7 @@ namespace WhiteLagoon.Web.Controllers
             });
             //view data perdoret per te levizur data nga controlelr tek view, ne rastin tone ne jemi te kontrolleri
             //dhe duam nje menyre qe te afishojme tek view listen e krijuar
-            ViewData["VillaList"] = list;
+            ViewBag.VillaList = list;
             return View();
         }
 
