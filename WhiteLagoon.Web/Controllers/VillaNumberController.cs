@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WhiteLagoon.Domain.Entities;
 using WhiteLagoon.Infrastructure.Data;
+using WhiteLagoon.Web.ViewModels;
 
 namespace WhiteLagoon.Web.Controllers
 {
@@ -15,37 +17,58 @@ namespace WhiteLagoon.Web.Controllers
         }
         public IActionResult Index()
         {
-            var villaNumbers = _db.VillaNumbers.ToList();
+            //duke shtuar .Include vendos navigation properties dhe shton inner join Villa te deklaruar ne menyre qe te afishoje emrat si liste
+            var villaNumbers = _db.VillaNumbers.Include(u=>u.Villa).ToList();
             return View(villaNumbers);
         }
 
         public IActionResult Create()
-        {
-            //ben si liste drop down merr villa nga db villas i konverton si liste ku u eshte text dhe value ca do mbaje eshte Id qe e kthen ne string qe me pas e therret te SelectListItem
-            IEnumerable<SelectListItem> list = _db.Villas.ToList().Select(u=> new SelectListItem 
-            {
-                Text = u.Name,
-                Value = u.Id.ToString()
-            });
-            //view data perdoret per te levizur data nga controlelr tek view, ne rastin tone ne jemi te kontrolleri
-            //dhe duam nje menyre qe te afishojme tek view listen e krijuar
-            ViewBag.VillaList = list;
-            return View();
+        { //eshte modeli i krijaur per view
+           
+                VillaNumberVM villaNumberVM = new()
+                {
+                    VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }),
+                };
+                return View(villaNumberVM);
+            
         }
 
         [HttpPost]
-        public IActionResult Create(VillaNumber obj)
+        public IActionResult Create(VillaNumberVM obj)
         {
             ModelState.Remove("Villa"); //kjo behet sepse kodi vetveiu ben verifkim me villa qe a eshte i duhur ose jo kjo heq ate validation nga villa
-            if (ModelState.IsValid) //verifikon qe nese ka marre te dhena ose jo ne menyre qe mos te kete problem ne insertim
+            bool villanumberexists = _db.VillaNumbers.Any(u=> u.Villa_Number == obj.VillaNumber.Villa_Number);
+            //nje variabel bool e cila verifion nese villa number nga db eshte e barabarte me VillaNumber te view model qe krijuam me pare
+            //nese modelstate eshte vaild dhe variabla bool eshte false atehere do krijohet nje entry ne te kunder error
+            if (ModelState.IsValid && !villanumberexists) //verifikon qe nese ka marre te dhena ose jo ne menyre qe mos te kete problem ne insertim
             {
-                _db.VillaNumbers.Add(obj); //kjo i thau qe do shtosh kete
+                _db.VillaNumbers.Add(obj.VillaNumber); //kjo i thau qe do shtosh kete
                 _db.SaveChanges(); //kjo e ruan te databaza
                 TempData["success"] = "The villa number has been created succesfully!";
                 return RedirectToAction("Index"); //mbasi e ben te con te index villa
             }
-            TempData["error"] = "The villa couldn't be created!";
-            return View();
+            if (villanumberexists)
+            {
+                TempData["error"] = "The villa number already exists!";
+            }
+            /* ketu ka dhe nje exception tjeter qe mbasi e krjon ajo nxjerr vetem qe e bera dhe nxjerr obj boshe
+             * por duhet te nxjerri listen perseri ndaj duhet te krijoj dhe nje here Villalist qe ja bashkangjis obj
+             * dhe e merr automatikisht mbasi mbaron if dhe ta nxjerri tek view
+             */
+            obj.VillaList = _db.Villas.ToList().Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+          
+            return View(obj);
+            //obj ketu duhet kur krijon pasi nxjerr exception pasi sepse tek e para e ben si duhet ketu kthen view por cfare do ktheje
+            //atehere duhet te ktheje nje objekt ndaj ajo qe krijuam me pare villanumber duhet te ktheje ate
+            
         }
         public IActionResult Update(int villaId) /*per te bere update deklaron si metode me nje parameter variabel per villa id
             pastaj Villa? shikon nese ka row te deklaraur e shenon si obj
